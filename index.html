@@ -2,88 +2,132 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Selamat Tahun Baru</title>
+  <title>Selamat Tahun Baru 2026</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
     body {
+      margin: 0;
       height: 100vh;
-      background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+      background: radial-gradient(circle at bottom, #1b2735 0%, #090a0f 100%);
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
       color: white;
       overflow: hidden;
     }
-
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
     .card {
-      background: rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+      background: rgba(255,255,255,0.12);
       padding: 40px;
-      border-radius: 20px;
+      border-radius: 22px;
       text-align: center;
+      max-width: 520px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
       backdrop-filter: blur(10px);
-      box-shadow: 0 0 40px rgba(0,0,0,0.5);
-      animation: fadeIn 2s ease;
-      max-width: 500px;
+      animation: fadeIn 1.5s ease;
     }
-
     h1 {
-      font-size: 2.5em;
+      color: gold;
       margin-bottom: 20px;
-      color: #ffd700;
     }
-
     p {
-      font-size: 1.1em;
-      line-height: 1.7;
-      margin-bottom: 20px;
+      line-height: 1.8;
+      font-size: 1.05em;
     }
-
     .name {
-      font-size: 1.3em;
+      margin-top: 20px;
       font-weight: bold;
-      margin-top: 10px;
       color: #00eaff;
     }
-
-    .fireworks {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from {opacity: 0; transform: translateY(30px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    audio {
+      display: none; /* Sembunyikan player */
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>🎆 Selamat Tahun Baru 2026 🎆</h1>
-    <p>
-      Tahun berganti, semoga langkah kita semakin berarti.<br>
-      Semoga di tahun yang baru ini,<br>
-      segala doa menemukan jalannya,<br>
-      segala usaha membuahkan hasil,<br>
-      dan setiap hari membawa harapan baru.
-    </p>
-    <div class="name">— Danang</div>
-  </div>
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2023/12/17/audio_12345678.mp3?filename=new-year-celebration-112233.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="fireworks"></canvas>
+
+<div class="card">
+  <h1>🎆 Selamat Tahun Baru 2026 🎆</h1>
+  <p>
+    Tahun berganti, semoga langkah kita semakin berarti.<br>
+    Semoga di tahun yang baru ini,<br>
+    segala doa menemukan jalannya,<br>
+    segala usaha membuahkan hasil,<br>
+    dan setiap hari membawa harapan baru.
+  </p>
+  <div class="name">— Danang🥳</div>
+</div>
+
+<script>
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function random(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function createFirework() {
+  const x = random(100, canvas.width - 100);
+  const y = random(50, canvas.height / 2);
+  const colors = ["#ffcc00", "#ff4d4d", "#00eaff", "#ffffff"];
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x, y,
+      radius: 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      angle: random(0, Math.PI * 2),
+      speed: random(2, 6),
+      alpha: 1
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach((p, i) => {
+    p.x += Math.cos(p.angle) * p.speed;
+    p.y += Math.sin(p.angle) * p.speed;
+    p.alpha -= 0.015;
+    if (p.alpha <= 0) particles.splice(i, 1);
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+
+setInterval(createFirework, 900);
+animate();
+
+window.onresize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+</script>
 
 </body>
 </html>
